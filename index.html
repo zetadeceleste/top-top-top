@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⭐ Top Top Top ⭐</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- WELCOME SCREEN -->
+        <div id="screen-welcome" class="screen active">
+            <div class="welcome-container">
+                <div class="welcome-content">
+                    <p class="welcome-pretitle">⭐ RANKING ⭐</p>
+                    <h1 class="welcome-title">
+                        <span class="wave-letter">T</span>
+                        <span class="wave-letter">O</span>
+                        <span class="wave-letter">P</span>
+                        <span class="wave-letter"> </span>
+                        <span class="wave-letter">T</span>
+                        <span class="wave-letter">O</span>
+                        <span class="wave-letter">P</span>
+                        <span class="wave-letter"> </span>
+                        <span class="wave-letter">T</span>
+                        <span class="wave-letter">O</span>
+                        <span class="wave-letter">P</span>
+                    </h1>
+                </div>
+                <button onclick="goToLogin()" class="btn-primary btn-large">INGRESAR</button>
+            </div>
+        </div>
+        <!-- LOGIN SCREEN - USER SELECTION -->
+        <div id="screen-login" class="screen">
+            <div class="container">
+                <h1>¿QUIÉN SOS?</h1>
+                <div id="icon-grid" class="icon-grid"></div>
+            </div>
+        </div>
+        <!-- LOGIN SCREEN - PASSWORD -->
+        <div id="screen-password" class="screen">
+            <div class="header">
+                <button onclick="backToIcons()" class="btn-back">←</button>
+                <h2>¡BIENVENIDO/A! 🎉</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <div class="selected-user-large">
+                    <img id="selected-icon" src="" alt="">
+                    <p id="selected-name"></p>
+                </div>
+                <input type="password" id="password-input" placeholder="Contraseña" autocomplete="current-password">
+                <button onclick="login()" class="btn-primary">ENTRAR</button>
+                <p id="login-error" class="error hidden"></p>
+            </div>
+        </div>
+        <!-- PASSWORD CHANGE SCREEN -->
+        <div id="screen-change-password" class="screen">
+            <div class="header">
+                <button onclick="cancelPasswordChange()" class="btn-back">←</button>
+                <h2>¡BIENVENIDO/A! 🎉</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <p class="subtitle">Por seguridad, cambiá tu contraseña</p>
+                <input type="password" id="new-password" placeholder="Nueva contraseña" autocomplete="new-password">
+                <input type="password" id="confirm-password" placeholder="Confirmar contraseña"
+                    autocomplete="new-password">
+                <button onclick="changePassword()" class="btn-primary">CAMBIAR CONTRASEÑA</button>
+                <p id="change-error" class="error hidden"></p>
+            </div>
+        </div>
+        <!-- HOME SCREEN -->
+        <div id="screen-home" class="screen">
+            <div class="home-header">
+                <button onclick="confirmLogout()" class="logout-btn">←</button>
+                <h2>⭐ Top Top Top ⭐</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <div class="profile-header">
+                    <div class="avatar-large">
+                        <img id="home-avatar" src="" alt="">
+                    </div>
+                    <h2 id="home-name"></h2>
+                </div>
+                <div class="main-buttons">
+                    <button onclick="goToVote()" class="btn-main">
+                        <span class="icon">⭐</span>
+                        <span>VOTAR</span>
+                    </button>
+                    <button onclick="goToRanking()" class="btn-main">
+                        <span class="icon">🏆</span>
+                        <span>RANKING</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- VOTE SCREEN - SELECTOR -->
+        <div id="screen-vote" class="screen">
+            <div class="header">
+                <button onclick="goHome()" class="btn-back">←</button>
+                <h2>⭐ Votar</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <p class="vote-instruction">ELIGE A QUIÉN VOTAR:</p>
+                <div id="vote-list" class="vote-list"></div>
+            </div>
+        </div>
+        <!-- VOTE SCREEN - STARS -->
+        <div id="screen-vote-stars" class="screen">
+            <div class="header">
+                <button onclick="backToVoteList()" class="btn-back">←</button>
+                <h2 id="voting-for-name">⭐</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container vote-stars-container">
+                <div class="vote-avatar-display">
+                    <img id="voting-for-avatar" src="" alt="">
+                </div>
+                <div class="rating-stars">
+                    <label class="rating-label" data-rating="1">
+                        <svg class="rating-star" viewBox="0 0 32 32">
+                            <g transform="translate(16,16)">
+                                <circle class="rating-star-ring" fill="none" stroke="#f4c430" stroke-width="16" r="8"
+                                    transform="scale(0)" />
+                            </g>
+                            <g stroke="#f4c430" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g transform="translate(16,16) rotate(180)">
+                                    <polygon class="rating-star-stroke"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="none" />
+                                    <polygon class="rating-star-fill"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="#f4c430" />
+                                </g>
+                                <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                                    <polyline class="rating-star-line" transform="rotate(0)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(72)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(144)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(216)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(288)" points="0 4,0 16" />
+                                </g>
+                            </g>
+                        </svg>
+                    </label>
+                    <label class="rating-label" data-rating="2">
+                        <svg class="rating-star" viewBox="0 0 32 32">
+                            <g transform="translate(16,16)">
+                                <circle class="rating-star-ring" fill="none" stroke="#f4c430" stroke-width="16" r="8"
+                                    transform="scale(0)" />
+                            </g>
+                            <g stroke="#f4c430" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g transform="translate(16,16) rotate(180)">
+                                    <polygon class="rating-star-stroke"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="none" />
+                                    <polygon class="rating-star-fill"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="#f4c430" />
+                                </g>
+                                <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                                    <polyline class="rating-star-line" transform="rotate(0)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(72)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(144)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(216)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(288)" points="0 4,0 16" />
+                                </g>
+                            </g>
+                        </svg>
+                    </label>
+                    <label class="rating-label" data-rating="3">
+                        <svg class="rating-star" viewBox="0 0 32 32">
+                            <g transform="translate(16,16)">
+                                <circle class="rating-star-ring" fill="none" stroke="#f4c430" stroke-width="16" r="8"
+                                    transform="scale(0)" />
+                            </g>
+                            <g stroke="#f4c430" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g transform="translate(16,16) rotate(180)">
+                                    <polygon class="rating-star-stroke"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="none" />
+                                    <polygon class="rating-star-fill"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="#f4c430" />
+                                </g>
+                                <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                                    <polyline class="rating-star-line" transform="rotate(0)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(72)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(144)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(216)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(288)" points="0 4,0 16" />
+                                </g>
+                            </g>
+                        </svg>
+                    </label>
+                    <label class="rating-label" data-rating="4">
+                        <svg class="rating-star" viewBox="0 0 32 32">
+                            <g transform="translate(16,16)">
+                                <circle class="rating-star-ring" fill="none" stroke="#f4c430" stroke-width="16" r="8"
+                                    transform="scale(0)" />
+                            </g>
+                            <g stroke="#f4c430" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g transform="translate(16,16) rotate(180)">
+                                    <polygon class="rating-star-stroke"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="none" />
+                                    <polygon class="rating-star-fill"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="#f4c430" />
+                                </g>
+                                <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                                    <polyline class="rating-star-line" transform="rotate(0)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(72)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(144)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(216)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(288)" points="0 4,0 16" />
+                                </g>
+                            </g>
+                        </svg>
+                    </label>
+                    <label class="rating-label" data-rating="5">
+                        <svg class="rating-star" viewBox="0 0 32 32">
+                            <g transform="translate(16,16)">
+                                <circle class="rating-star-ring" fill="none" stroke="#f4c430" stroke-width="16" r="8"
+                                    transform="scale(0)" />
+                            </g>
+                            <g stroke="#f4c430" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <g transform="translate(16,16) rotate(180)">
+                                    <polygon class="rating-star-stroke"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="none" />
+                                    <polygon class="rating-star-fill"
+                                        points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                        fill="#f4c430" />
+                                </g>
+                                <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                                    <polyline class="rating-star-line" transform="rotate(0)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(72)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(144)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(216)" points="0 4,0 16" />
+                                    <polyline class="rating-star-line" transform="rotate(288)" points="0 4,0 16" />
+                                </g>
+                            </g>
+                        </svg>
+                    </label>
+                </div>
+                <button id="confirm-vote-btn" class="btn-primary" onclick="confirmVote()">CONFIRMAR VOTO</button>
+            </div>
+        </div>
+        <!-- RANKING SCREEN -->
+        <div id="screen-ranking" class="screen">
+            <div class="header">
+                <button onclick="goHome()" class="btn-back">←</button>
+                <h2>🏆 Ranking</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <div id="ranking-table" class="ranking-table"></div>
+                <button onclick="goToRecentVotes()" class="btn-primary" style="margin-top: 1rem;"> 📝 VER ÚLTIMAS
+                    VOTACIONES </button>
+            </div>
+        </div>
+        <!-- RECENT VOTES SCREEN -->
+        <div id="screen-recent-votes" class="screen">
+            <div class="header">
+                <button onclick="goToRanking()" class="btn-back">←</button>
+                <h2>📝 Últimas Votaciones</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <div id="recent-votes" class="recent-votes"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Emoji rain container (global) -->
+    <div id="emoji-rain-container" class="emoji-rain-container"></div>
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-icon" id="modal-icon"></div>
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <div class="modal-buttons" id="modal-buttons"></div>
+        </div>
+    </div>
+    <!-- LOADING -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+    <script src="config.js" type="module"></script>
+    <script src="app.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+# Vercel
+.vercel
+
+# Claude
+.claude
+
+# Sistema
+.DS_Store
+*.log

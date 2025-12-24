@@ -1,0 +1,13 @@
+{
+  "name": "top-top-top",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Family voting app with ranking system",
+  "scripts": {
+    "recreate-users": "node scripts/recreate_users.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1"
+  }
+}

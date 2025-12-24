@@ -4,6 +4,13 @@
 # Claude
 .claude
 
+# Environment variables
+.env
+.env.local
+
 # Sistema
 .DS_Store
 *.log
+
+# Node
+node_modules

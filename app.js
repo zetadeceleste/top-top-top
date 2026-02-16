@@ -14,6 +14,7 @@ let currentUser = null
 let selectedUsername = null
 let votingForUsername = null
 let selectedRating = null
+let votesSubscription = null
 
 // Audio state
 let audioInitialized = false
@@ -40,6 +41,7 @@ async function init() {
     } else {
       await renderHome()
       showScreen('home')
+      setupVoteNotifications()
     }
   } else {
     renderIconGrid()
@@ -120,6 +122,7 @@ window.login = async function () {
   } else {
     await renderHome()
     showScreen('home')
+    setupVoteNotifications()
   }
 
   showLoading(false)
@@ -158,6 +161,7 @@ window.changePassword = async function () {
 
   await renderHome()
   showScreen('home')
+  setupVoteNotifications()
   showLoading(false)
 }
 
@@ -273,6 +277,10 @@ window.confirmLogout = function () {
 }
 
 window.logout = async function () {
+  if (votesSubscription) {
+    supabase.removeChannel(votesSubscription)
+    votesSubscription = null
+  }
   await supabase.auth.signOut()
   currentUser = null
   window.location.reload()
@@ -868,6 +876,94 @@ function showModal({ icon, title, message, buttons }) {
 function closeModal() {
   const overlay = document.getElementById('modal-overlay')
   overlay.classList.add('hidden')
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+function setupVoteNotifications() {
+  if (!currentUser) return
+
+  // Unsubscribe from previous subscription if exists
+  if (votesSubscription) {
+    supabase.removeChannel(votesSubscription)
+  }
+
+  // Subscribe to new votes in the votes table
+  votesSubscription = supabase
+    .channel('votes-channel')
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'votes',
+        filter: `voted_for_id=eq.${currentUser.id}`,
+      },
+      async (payload) => {
+        // Get voter information
+        const { data: voterProfile } = await supabase
+          .from('profiles')
+          .select('display_name, email')
+          .eq('id', payload.new.voter_id)
+          .single()
+
+        if (voterProfile) {
+          const stars = '⭐'.repeat(payload.new.rating)
+          const voterName = voterProfile.display_name || voterProfile.email.split('@')[0]
+
+          showNotification({
+            icon: payload.new.rating === 1 ? '💩' : payload.new.rating === 5 ? '🎉' : '⭐',
+            title: '¡NUEVO VOTO!',
+            message: `${voterName} te votó con ${stars}`,
+          })
+
+          // Play sound
+          if (audioInitialized) {
+            playSound(payload.new.rating)
+          }
+
+          // Vibrate
+          if (navigator.vibrate) {
+            if (payload.new.rating === 1) {
+              navigator.vibrate([100, 50, 100, 50, 150])
+            } else if (payload.new.rating === 5) {
+              navigator.vibrate([50, 30, 50, 30, 100])
+            } else {
+              navigator.vibrate(30)
+            }
+          }
+        }
+      }
+    )
+    .subscribe()
+}
+
+function showNotification({ icon, title, message }) {
+  const toast = document.getElementById('notification-toast')
+  const iconEl = document.getElementById('notification-icon')
+  const titleEl = document.getElementById('notification-title')
+  const messageEl = document.getElementById('notification-message')
+
+  iconEl.textContent = icon
+  titleEl.textContent = title
+  messageEl.textContent = message
+
+  toast.classList.remove('hidden')
+
+  // Trigger animation
+  setTimeout(() => {
+    toast.classList.add('show')
+  }, 10)
+
+  // Hide after 4 seconds
+  setTimeout(() => {
+    toast.classList.remove('show')
+    setTimeout(() => {
+      toast.classList.add('hidden')
+    }, 300)
+  }, 4000)
 }
 
 // Start app

@@ -14,6 +14,8 @@ A fun, mobile-first family voting application with animated star ratings, emoji 
 - **Real-time Ranking**: Live leaderboard showing all family members (even with no votes)
 - **Recent Votes**: Separate screen showing the last 10 votes with relative timestamps
 - **Password Change Flow**: First-time login requires password change
+- **Password Recovery**: Email-based password reset with Supabase Auth
+- **Real-time Notifications**: Get notified instantly when someone votes for you (in-app + browser push)
 - **Mobile Optimized**: Designed for iPhone 13 mini and similar devices
 - **Custom Modals**: Beautiful animated confirmation dialogs
 
@@ -80,7 +82,23 @@ Execute `migrations/migration.sql` in your Supabase SQL editor:
 -- Creates trigger to auto-populate profiles
 ```
 
-### 4. Create user accounts
+### 4. Configure Email for Password Recovery
+
+Go to Supabase Dashboard → **Settings** → **Auth** → **Email Templates**:
+
+1. **SMTP Settings** (optional, recommended for production):
+   - Configure a custom SMTP provider (Resend, SendGrid, etc.)
+   - Or use Supabase's default email service (limited)
+
+2. **Email Templates**:
+   - Customize the "Reset Password" template if needed
+   - Set "Confirm Email" to disabled if using local emails
+
+3. **Enable Realtime** (for notifications):
+   - Go to **Database** → **Publications**
+   - Enable Realtime for the `votes` table
+
+### 5. Create user accounts
 
 **Option A - Automated (Recommended):**
 
@@ -107,13 +125,13 @@ In Supabase Dashboard → Authentication → Users, create users with:
 - Password: `123{username}` (e.g., `123celes`, `123alfredo`)
 - User Metadata: `{"display_name": "Name", "needs_password_change": true}`
 
-### 5. Add assets
+### 6. Add assets
 
 Place profile images in:
 - `assets/icons/` - Static PNG icons (for login/ranking)
 - `assets/avatars/` - Animated GIFs (for voting screen)
 
-### 6. Deploy or serve locally
+### 7. Deploy or serve locally
 
 **Deploy to Vercel:**
 
@@ -251,6 +269,21 @@ npm run recreate-users
 ```
 
 3. (Optional) Add initial votes for testing in SQL Editor
+
+### Reset User Password
+
+To manually reset a user's password:
+
+```bash
+npm run reset-password <username> <new_password>
+```
+
+Example:
+```bash
+npm run reset-password celes MyNewPassword123
+```
+
+This uses the Supabase Admin API to update passwords directly.
 
 ## 🌐 Deployment
 

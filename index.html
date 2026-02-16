@@ -54,6 +54,27 @@
                 <input type="password" id="password-input" placeholder="Contraseña" autocomplete="current-password">
                 <button onclick="login()" class="btn-primary">ENTRAR</button>
                 <p id="login-error" class="error hidden"></p>
+                <button onclick="goToForgotPassword()" class="btn-link">¿Olvidaste tu contraseña?</button>
+            </div>
+        </div>
+        <!-- FORGOT PASSWORD SCREEN -->
+        <div id="screen-forgot-password" class="screen">
+            <div class="header">
+                <button onclick="backToPasswordScreen()" class="btn-back">←</button>
+                <h2>Recuperar Contraseña</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="container">
+                <div class="selected-user-large">
+                    <img id="forgot-icon" src="" alt="">
+                    <p id="forgot-name"></p>
+                </div>
+                <p class="subtitle">Para verificar que sos vos, escribí tu nombre completo:</p>
+                <input type="text" id="verification-input" placeholder="Tu nombre completo" autocomplete="off">
+                <input type="password" id="new-password-reset" placeholder="Nueva contraseña" autocomplete="new-password">
+                <input type="password" id="confirm-password-reset" placeholder="Confirmar contraseña" autocomplete="new-password">
+                <button onclick="resetPassword()" class="btn-primary">CAMBIAR CONTRASEÑA</button>
+                <p id="forgot-error" class="error hidden"></p>
             </div>
         </div>
         <!-- PASSWORD CHANGE SCREEN -->

@@ -195,6 +195,9 @@ async function renderHome() {
   }
 
   document.getElementById('home-name').textContent = member.name + badge
+
+  // Request notification permission
+  await requestNotificationPermission()
 }
 
 async function getUserRankingPosition(userId) {
@@ -940,7 +943,29 @@ function setupVoteNotifications() {
     .subscribe()
 }
 
+async function requestNotificationPermission() {
+  // Check if browser supports notifications
+  if (!('Notification' in window)) {
+    console.log('Este navegador no soporta notificaciones')
+    return false
+  }
+
+  // If already granted, no need to ask again
+  if (Notification.permission === 'granted') {
+    return true
+  }
+
+  // If not denied, ask for permission
+  if (Notification.permission !== 'denied') {
+    const permission = await Notification.requestPermission()
+    return permission === 'granted'
+  }
+
+  return false
+}
+
 function showNotification({ icon, title, message }) {
+  // Show in-app toast notification
   const toast = document.getElementById('notification-toast')
   const iconEl = document.getElementById('notification-icon')
   const titleEl = document.getElementById('notification-title')
@@ -964,6 +989,18 @@ function showNotification({ icon, title, message }) {
       toast.classList.add('hidden')
     }, 300)
   }, 4000)
+
+  // Also show browser/system notification if permission granted
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(title, {
+      body: message,
+      icon: '/assets/icons/default.png', // You can customize this
+      badge: '/assets/icons/default.png',
+      tag: 'vote-notification',
+      requireInteraction: false,
+      vibrate: [200, 100, 200],
+    })
+  }
 }
 
 // Start app

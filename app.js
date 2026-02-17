@@ -103,7 +103,7 @@ window.goToForgotPassword = function () {
 
   document.getElementById('forgot-icon').src = `assets/icons/${member.icon}`
   document.getElementById('forgot-name').textContent = member.name
-  document.getElementById('email-input').value = member.email
+  document.getElementById('email-input').value = '' // Empty so user can type their email
   document.getElementById('forgot-error').classList.add('hidden')
   document.getElementById('forgot-success').classList.add('hidden')
 
@@ -117,10 +117,12 @@ window.backToPasswordScreen = function () {
 }
 
 window.sendPasswordReset = async function () {
-  const email = document.getElementById('email-input').value
+  const email = document.getElementById('email-input').value.trim()
 
-  if (!email) {
-    showError('forgot-error', 'Email inválido')
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email || !emailRegex.test(email)) {
+    showError('forgot-error', 'Ingresá un email válido')
     return
   }
 

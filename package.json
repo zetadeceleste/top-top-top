@@ -5,7 +5,8 @@
   "description": "Family voting app with ranking system",
   "scripts": {
     "recreate-users": "node scripts/recreate_users.js",
-    "reset-password": "node scripts/reset_password.js"
+    "reset-password": "node scripts/reset_password.js",
+    "update-email": "node scripts/update_email.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",

@@ -63,18 +63,31 @@ async function updateEmail() {
     process.exit(1)
   }
 
-  // Update email in Supabase
+  // Update email in Supabase Auth
   const { error: updateError } = await supabase.auth.admin.updateUserById(
     user.id,
     { email: newEmail }
   )
 
   if (updateError) {
-    console.error('❌ Error al actualizar email:', updateError.message)
+    console.error('❌ Error al actualizar email en Auth:', updateError.message)
     process.exit(1)
   }
 
-  console.log(`✅ Email de ${member.name} actualizado en Supabase!`)
+  console.log(`✅ Email de ${member.name} actualizado en Supabase Auth!`)
+
+  // Update email in profiles table
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({ email: newEmail })
+    .eq('id', user.id)
+
+  if (profileError) {
+    console.error('❌ Error al actualizar email en profiles:', profileError.message)
+    console.log('⚠️  Email actualizado en Auth pero no en profiles')
+  } else {
+    console.log(`✅ Email de ${member.name} actualizado en tabla profiles!`)
+  }
 
   // Update email in config.js
   try {

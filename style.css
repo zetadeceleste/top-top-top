@@ -150,6 +150,50 @@ body {
   font-size: 1.2rem;
 }
 
+/* NOTIFICATION TOGGLE */
+.notification-toggle {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn-notification {
+  background: var(--card-bg);
+  border: 2px solid var(--text-dim);
+  color: var(--text-dim);
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  font-family: 'Pixelify Sans', cursive;
+  width: 100%;
+}
+
+.btn-notification .icon {
+  font-size: 1rem;
+}
+
+.btn-notification:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-notification:active {
+  transform: scale(0.98);
+}
+
+.btn-notification.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
 /* LOGIN */
 h1 {
   text-align: center;

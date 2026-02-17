@@ -54,6 +54,7 @@ async function init() {
       showScreen('home')
       showLoading(false)
       setupVoteNotifications()
+      updateNotificationButtonState()
       // Request notifications after loading is hidden
       setTimeout(() => {
         requestNotificationPermission()
@@ -1081,6 +1082,72 @@ async function requestNotificationPermission() {
   }
 
   return false
+}
+
+function updateNotificationButtonState() {
+  if (!('Notification' in window)) {
+    return
+  }
+
+  const btn = document.getElementById('notification-toggle-btn')
+  const iconBtn = document.getElementById('notification-icon-btn')
+  const statusText = document.getElementById('notification-status-text')
+
+  if (!btn || !iconBtn || !statusText) return
+
+  if (Notification.permission === 'granted') {
+    btn.classList.add('active')
+    iconBtn.textContent = '🔔'
+    statusText.textContent = 'NOTIFICACIONES ACTIVAS'
+  } else if (Notification.permission === 'denied') {
+    btn.classList.remove('active')
+    iconBtn.textContent = '🔕'
+    statusText.textContent = 'NOTIFICACIONES BLOQUEADAS'
+  } else {
+    btn.classList.remove('active')
+    iconBtn.textContent = '🔔'
+    statusText.textContent = 'ACTIVAR NOTIFICACIONES'
+  }
+}
+
+window.toggleNotifications = async function () {
+  if (!('Notification' in window)) {
+    showModal({
+      icon: '❌',
+      title: 'NO DISPONIBLE',
+      message: 'Tu navegador no soporta notificaciones.',
+      buttons: [{ text: 'OK', onClick: closeModal }],
+    })
+    return
+  }
+
+  if (Notification.permission === 'granted') {
+    showModal({
+      icon: 'ℹ️',
+      title: 'NOTIFICACIONES ACTIVAS',
+      message: 'Las notificaciones ya están activadas. Si no te llegan, revisá la configuración de tu navegador.',
+      buttons: [{ text: 'OK', onClick: closeModal }],
+    })
+  } else if (Notification.permission === 'denied') {
+    showModal({
+      icon: '⚠️',
+      title: 'NOTIFICACIONES BLOQUEADAS',
+      message: 'Las notificaciones están bloqueadas. Para activarlas, andá a la configuración de tu navegador y habilitá las notificaciones para este sitio.',
+      buttons: [{ text: 'OK', onClick: closeModal }],
+    })
+  } else {
+    const granted = await requestNotificationPermission()
+    updateNotificationButtonState()
+
+    if (granted) {
+      showModal({
+        icon: '✅',
+        title: '¡NOTIFICACIONES ACTIVADAS!',
+        message: 'Ahora vas a recibir notificaciones cuando alguien te vote.',
+        buttons: [{ text: 'OK', onClick: closeModal }],
+      })
+    }
+  }
 }
 
 function showNotification({ icon, title, message }) {

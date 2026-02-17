@@ -243,7 +243,22 @@ window.cancelPasswordChange = async function () {
 // ============================================
 
 async function renderHome() {
-  const member = FAMILY_MEMBERS.find((m) => m.username === currentUser.username)
+  // Find member by username or email
+  const member = FAMILY_MEMBERS.find((m) =>
+    m.username === currentUser.username ||
+    m.email === currentUser.email ||
+    currentUser.email?.includes(m.username)
+  )
+
+  // If member not found, use generic data
+  if (!member) {
+    console.warn('Member not found for user:', currentUser)
+    document.getElementById('home-avatar').src = `assets/avatars/default.gif`
+    document.getElementById('home-name').textContent = currentUser.display_name || 'Usuario'
+    await requestNotificationPermission()
+    return
+  }
+
   document.getElementById('home-avatar').src = `assets/avatars/${member.gif}`
 
   // Get user's ranking position

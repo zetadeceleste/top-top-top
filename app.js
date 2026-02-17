@@ -800,7 +800,6 @@ async function loadRanking() {
       ...p,
       avg: counts[p.id] ? scores[p.id] / counts[p.id] : 0,
       total: counts[p.id] || 0,
-      username: p.email.split('@')[0],
     }))
     .sort((a, b) => {
       // First by average, then by vote count
@@ -814,7 +813,8 @@ async function loadRanking() {
 
   rankingTable.innerHTML = ranking
     .map((user, i) => {
-      const member = FAMILY_MEMBERS.find((m) => m.username === user.username)
+      const member = FAMILY_MEMBERS.find((m) => m.email === user.email) ||
+        FAMILY_MEMBERS.find((m) => m.name.toLowerCase() === user.display_name?.toLowerCase())
       const isFirst = i === 0
       const isLast = i === totalUsers - 1
       const posClass =
@@ -916,10 +916,14 @@ async function loadUserData(user) {
     .eq('id', user.id)
     .single()
 
+  const memberMatch = FAMILY_MEMBERS.find(
+    (m) => m.email === user.email || m.email === profile?.email
+  )
+
   currentUser = {
     id: user.id,
     email: user.email,
-    username: user.email.split('@')[0],
+    username: memberMatch?.username || user.email.split('@')[0],
     ...profile,
   }
 }

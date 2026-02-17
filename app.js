@@ -1044,10 +1044,38 @@ async function requestNotificationPermission() {
     return true
   }
 
-  // If not denied, ask for permission
-  if (Notification.permission !== 'denied') {
-    const permission = await Notification.requestPermission()
-    return permission === 'granted'
+  // If already denied, don't ask again
+  if (Notification.permission === 'denied') {
+    return false
+  }
+
+  // If permission is default (not asked yet), show modal
+  if (Notification.permission === 'default') {
+    return new Promise((resolve) => {
+      showModal({
+        icon: '🔔',
+        title: 'ACTIVAR NOTIFICACIONES',
+        message: '¿Querés recibir notificaciones cuando alguien te vote? Te avisaremos al instante.',
+        buttons: [
+          {
+            text: 'NO, GRACIAS',
+            className: 'secondary',
+            onClick: () => {
+              closeModal()
+              resolve(false)
+            },
+          },
+          {
+            text: 'ACTIVAR',
+            onClick: async () => {
+              closeModal()
+              const permission = await Notification.requestPermission()
+              resolve(permission === 'granted')
+            },
+          },
+        ],
+      })
+    })
   }
 
   return false

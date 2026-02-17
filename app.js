@@ -137,7 +137,7 @@ window.sendPasswordReset = async function () {
   if (email.endsWith('@toptoptop.local')) {
     showError(
       'forgot-error',
-      'Por favor enviá tu email real a la administradora para habilitar esta función. ¡Gracias!'
+      'Por favor enviá tu email a la administradora para habilitar esta función. ¡Gracias!'
     )
     return
   }

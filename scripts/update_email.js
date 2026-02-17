@@ -30,7 +30,7 @@ async function updateEmail() {
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(newEmail)) {
-    console.error('❌ Email inválido. Debe ser un email real (ej: nombre@gmail.com)')
+    console.error('❌ Email inválido. Debe ser un email (ej: nombre@gmail.com)')
     process.exit(1)
   }
 
@@ -63,7 +63,7 @@ async function updateEmail() {
     process.exit(1)
   }
 
-  // Update email
+  // Update email in Supabase
   const { error: updateError } = await supabase.auth.admin.updateUserById(
     user.id,
     { email: newEmail }
@@ -74,8 +74,48 @@ async function updateEmail() {
     process.exit(1)
   }
 
-  console.log(`✅ Email de ${member.name} actualizado exitosamente!`)
-  console.log(`\n📧 Ahora ${member.name} puede usar "¿Olvidaste tu contraseña?" con: ${newEmail}\n`)
+  console.log(`✅ Email de ${member.name} actualizado en Supabase!`)
+
+  // Update email in config.js
+  try {
+    const fs = await import('fs')
+    const path = await import('path')
+    const { fileURLToPath } = await import('url')
+
+    const __filename = fileURLToPath(import.meta.url)
+    const __dirname = path.dirname(__filename)
+    const configPath = path.join(__dirname, '../config.js')
+
+    let configContent = fs.readFileSync(configPath, 'utf8')
+
+    // Find and replace the email for this user
+    const oldEmailPattern = new RegExp(
+      `(username: '${username}',[^}]*email: ')([^']+)(')`,
+      'g'
+    )
+
+    if (!configContent.match(oldEmailPattern)) {
+      console.warn('⚠️  No se pudo encontrar el email en config.js para actualizar')
+      console.log(`\n📧 Ahora ${member.name} puede usar "¿Olvidaste tu contraseña?" con: ${newEmail}`)
+      console.log(`⚠️  IMPORTANTE: Actualizá manualmente el email en config.js\n`)
+      process.exit(0)
+    }
+
+    configContent = configContent.replace(oldEmailPattern, `$1${newEmail}$3`)
+
+    fs.writeFileSync(configPath, configContent, 'utf8')
+
+    console.log(`✅ Email de ${member.name} actualizado en config.js!`)
+    console.log(`\n📧 Ahora ${member.name} puede usar "¿Olvidaste tu contraseña?" con: ${newEmail}`)
+    console.log(`\n⚠️  IMPORTANTE: Hacé commit y push de los cambios:`)
+    console.log(`   git add config.js`)
+    console.log(`   git commit -m "Update ${username} email to ${newEmail}"`)
+    console.log(`   git push\n`)
+  } catch (err) {
+    console.error('⚠️  Error al actualizar config.js:', err.message)
+    console.log(`\n📧 El email fue actualizado en Supabase pero NO en config.js`)
+    console.log(`   Actualizalo manualmente en config.js y hacé commit\n`)
+  }
 }
 
 updateEmail()

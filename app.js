@@ -28,6 +28,10 @@ let currentLongSynth = null
 async function init() {
   showLoading(true)
 
+  // Check if coming from password reset link
+  const hashParams = new URLSearchParams(window.location.hash.substring(1))
+  const isRecovery = hashParams.get('type') === 'recovery'
+
   // Check existing session
   const {
     data: { session },
@@ -36,7 +40,12 @@ async function init() {
   if (session) {
     await loadUserData(session.user)
 
-    if (session.user.user_metadata?.needs_password_change) {
+    // If coming from password reset, force password change screen
+    if (isRecovery) {
+      // Clear the hash from URL
+      window.history.replaceState(null, '', window.location.pathname)
+      showScreen('change-password')
+    } else if (session.user.user_metadata?.needs_password_change) {
       showScreen('change-password')
     } else {
       await renderHome()

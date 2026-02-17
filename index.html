@@ -113,7 +113,9 @@
             <div class="home-header">
                 <button onclick="confirmLogout()" class="logout-btn">←</button>
                 <h2>⭐ Top Top Top ⭐</h2>
-                <div style="width: 40px;"></div>
+                <button onclick="toggleNotifications()" class="btn-notification-icon" id="notification-toggle-btn">
+                    <span id="notification-icon-btn">🔔</span>
+                </button>
             </div>
             <div class="container">
                 <div class="profile-header">
@@ -130,12 +132,6 @@
                     <button onclick="goToRanking()" class="btn-main">
                         <span class="icon">🏆</span>
                         <span>RANKING</span>
-                    </button>
-                </div>
-                <div class="notification-toggle">
-                    <button onclick="toggleNotifications()" class="btn-notification" id="notification-toggle-btn">
-                        <span class="icon" id="notification-icon-btn">🔔</span>
-                        <span id="notification-status-text">NOTIFICACIONES</span>
                     </button>
                 </div>
             </div>

@@ -1091,22 +1091,20 @@ function updateNotificationButtonState() {
 
   const btn = document.getElementById('notification-toggle-btn')
   const iconBtn = document.getElementById('notification-icon-btn')
-  const statusText = document.getElementById('notification-status-text')
 
-  if (!btn || !iconBtn || !statusText) return
+  if (!btn || !iconBtn) return
+
+  // Reset classes
+  btn.classList.remove('active', 'blocked')
 
   if (Notification.permission === 'granted') {
     btn.classList.add('active')
     iconBtn.textContent = '🔔'
-    statusText.textContent = 'NOTIFICACIONES ACTIVAS'
   } else if (Notification.permission === 'denied') {
-    btn.classList.remove('active')
+    btn.classList.add('blocked')
     iconBtn.textContent = '🔕'
-    statusText.textContent = 'NOTIFICACIONES BLOQUEADAS'
   } else {
-    btn.classList.remove('active')
     iconBtn.textContent = '🔔'
-    statusText.textContent = 'ACTIVAR NOTIFICACIONES'
   }
 }
 

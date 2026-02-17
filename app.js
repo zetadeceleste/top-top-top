@@ -672,12 +672,26 @@ function playSound(rating) {
     return
   }
 
+  if (currentLongSynth) {
+    currentLongSynth.triggerRelease()
+    currentLongSynth.dispose()
+    currentLongSynth = null
+  }
+
   const synth = new Tone.Synth({
     oscillator: { type: 'square' },
     envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 },
   }).toDestination()
 
+  currentLongSynth = synth
   synth.triggerAttackRelease(SOUND_NOTES[rating - 1], '0.1')
+
+  setTimeout(() => {
+    if (currentLongSynth === synth) {
+      synth.dispose()
+      currentLongSynth = null
+    }
+  }, 300)
 
   if (navigator.vibrate) navigator.vibrate(30)
 }

@@ -62,7 +62,7 @@ export const FAMILY_MEMBERS = [
     name: 'Renzo',
     icon: 'renzo.png',
     gif: 'renzo.gif',
-    email: 'renzo@toptoptop.local',
+    email: 'renzo.ledda@gmail.com',
   },
   {
     username: 'sandra',

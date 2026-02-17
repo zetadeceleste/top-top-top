@@ -112,7 +112,6 @@ window.goToForgotPassword = function () {
 
   document.getElementById('forgot-icon').src = `assets/icons/${member.icon}`
   document.getElementById('forgot-name').textContent = member.name
-  document.getElementById('email-input').value = '' // Empty so user can type their email
   document.getElementById('forgot-error').classList.add('hidden')
   document.getElementById('forgot-success').classList.add('hidden')
 
@@ -126,12 +125,20 @@ window.backToPasswordScreen = function () {
 }
 
 window.sendPasswordReset = async function () {
-  const email = document.getElementById('email-input').value.trim()
+  if (!selectedUsername) {
+    showError('forgot-error', 'Error: Usuario no seleccionado')
+    return
+  }
 
-  // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!email || !emailRegex.test(email)) {
-    showError('forgot-error', 'Ingresá un email válido')
+  const member = FAMILY_MEMBERS.find((m) => m.username === selectedUsername)
+  const email = member.email
+
+  // Check if user has a temporary email (not real)
+  if (email.endsWith('@toptoptop.local')) {
+    showError(
+      'forgot-error',
+      'Por favor enviá tu email real a la administradora para habilitar esta función. ¡Gracias!'
+    )
     return
   }
 

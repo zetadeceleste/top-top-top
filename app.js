@@ -45,19 +45,25 @@ async function init() {
       // Clear the hash from URL
       window.history.replaceState(null, '', window.location.pathname)
       showScreen('change-password')
+      showLoading(false)
     } else if (session.user.user_metadata?.needs_password_change) {
       showScreen('change-password')
+      showLoading(false)
     } else {
       await renderHome()
       showScreen('home')
+      showLoading(false)
       setupVoteNotifications()
+      // Request notifications after loading is hidden
+      setTimeout(() => {
+        requestNotificationPermission()
+      }, 500)
     }
   } else {
     renderIconGrid()
     showScreen('welcome')
+    showLoading(false)
   }
-
-  showLoading(false)
 }
 
 // ============================================
@@ -262,7 +268,6 @@ async function renderHome() {
     console.warn('Member not found for user:', currentUser)
     document.getElementById('home-avatar').src = `assets/avatars/default.gif`
     document.getElementById('home-name').textContent = currentUser.display_name || 'Usuario'
-    await requestNotificationPermission()
     return
   }
 
@@ -284,9 +289,6 @@ async function renderHome() {
   }
 
   document.getElementById('home-name').textContent = member.name + badge
-
-  // Request notification permission
-  await requestNotificationPermission()
 }
 
 async function getUserRankingPosition(userId) {

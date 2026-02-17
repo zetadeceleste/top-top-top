@@ -20,7 +20,7 @@ export const FAMILY_MEMBERS = [
     name: 'Celes',
     icon: 'celes.png',
     gif: 'celes.gif',
-    email: 'celes@toptoptop.local',
+    email: 'zdceleste@gmail.com',
   },
   {
     username: 'flor',
